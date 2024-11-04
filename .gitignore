@@ -1,0 +1,9 @@
+/venv/
+/docs/
+.idea/
+muestras
+build
+dist
+*.spec
+C:
+*__pycache__

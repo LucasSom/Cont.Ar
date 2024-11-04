@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>@Cont.Ar</h1>
+    <h2>Índice</h2>
+    <ul class="toc-list">
+        <li>
+            <a href="#instrucciones">Instrucciones</a>
+            <ul>
+                <li>
+                    <a href="#nueva_muestra">Nueva muestra</a>
+                </li>
+                <li>
+                    <a href="#Sesion">Sesión (Cargar muestra)</a>
+                </li>
+                <li>
+                    <a href="#Graficos">Generar gráficos</a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#acerca_de">Acerca de</a>
+        </li>
+    </ul>
+
+    <h1 id="instrucciones">Instrucciones</h1>
+    <p>El programa consta de 3 secciones: la definición de un nuevo conteo, la sesión de conteo y la generación de
+        gráficos con sus tablas asociadas. Cada uno de estos pasos se condice con una opción del menú principal, es
+        decir, "Nueva muestra" para definir un nuevo conteo, "Cargar muestra" para seguir una sesión de conteo ya
+        empezada y "Generar gráficos" para generar los gráficos y tablas.
+    </p>
+
+    <h2 id="nueva_muestra">Nueva muestra</h2>
+    <p>Al hacer click sobre "Nueva muestra" aparecerá una ventana donde se ingresarán los parámetros de la muestra.
+        <strong>Se debe tener en cuenta que el cálculo de las tablas y de gráficos se realizan sobre las
+            muestras con el mismo nombre de <em>localidad</em></strong>. El sistema diferencia mayúsculas y signos de
+        puntuación. Por otro lado, la cantidad de lecturas determinan cuándo se finalizará automáticamente el conteo.
+    </p>
+    <p>Para realizar el conteo se emplea un mapa de teclas, es decir, una asignación de una letra o número del teclado
+        a un tipo de componente. <strong>El nombre del componente debe comenzar con la abreviatura entre
+        paréntesis</strong>. Por ejemplo, "(Qmo) Cuarzo monocristalino onduloso". Para crear un nuevo mapa, hacer click
+        en el botón "Crear nuevo mapa de teclas". El programa asociará todo lo que comienza con Q, y lo
+        agrupará en el vértice del Cuarzo, todo lo que comience con F agrupándolo en el
+        vértice del feldespato y todo lo que comience con L en el vértice de líticos.
+        Se debe tener especial cuidado con los tipos de cuarzos que se quieran definir y con
+        los tipos de líticos que se quieran definir ya que ello afecta el resultado de los
+        diagramas. Todos los otros componentes comienzan con la letra O de "Otros". Al finalizar la edición del mapa se
+        lo guarda en un archivo CSV para luego poder utilizarlo en el conteo. Es importante que si se quieren obtener
+        tablas ordenadas, la asignación de teclas se haga en forma alfabética dentro de cada uno de los subtipos.
+        Primero se ordenarán los cuarzos (Qmf, Qmo, Qp1), luego los feldespatos con el mismo criterio y lo mismo dentro
+        de los líticos, es decir: Lv (Lítico volcánico) ira en la tabla, después que Lm (Lítico metamórfico) y también
+        después de Ls (Lítico sedimentario). En el caso de querer discriminar entre varios tipos de líticos dentro de
+        un mismo grupo, se recomienda usar Lv1, Lv2 o Lva, Lvb etc. Para poder usar el diagrama de discriminación
+        (Ls-Lv-Lm) se asignen las teclas iniciales correctamente.
+    </p>
+    <p>
+        Para iniciar el conteo, al crear una nueva muestra, hacer click en "Cargar mapa de teclas" donde se puede
+        editar el mapa o dejarlo tal cual está.
+    </p>
+    <p>Al finalizar la parametrización de la muestra, cliquear en "Guardar". Se abrirá una ventana de diálogo
+        para guardar la muestra en un archivo de tipo <em>.mtra</em>. Luego de guardar se abrirá la ventana de "Sesión".
+    </p>
+
+    <h2 id="Sesion">Sesión (Cargar muestra)</h2>
+    <p>La sesión de conteo se efectúa en una ventana con tres paneles: a la izquierda se encuentra la lista de
+        componentes contadas según el orden de conteo. Al centro, el mapa de teclas. Y a la derecha se lista el conteo
+        de componentes junto con la cantidad total de componentes contadas. Para ingresar las componentes, simplemente
+        se debe tocar la tecla correspondiente al tipo de componente a contar.
+        Una vez que se llega al número de componentes determinado en los parámetros de la
+        muestra finaliza la sesión y se guarda el conteo (en porcentaje) en un archivo con el nombre de la
+        localidad. Si ya existía un archivo con ese nombre, se agrega una fila a la tabla con los
+        datos de la nueva muestra. La tabla, además, consta de una última fila con el
+        promedio de todos los valores.
+    </p>
+    <p>Si durante el conteo se desea deshacer una roca ingresada se puede hacer click en el botón "Deshacer", o bien,
+        apretar la tecla "Borrar" o la tecla "Suprimir" y volver a tocar la tecla correspondiente.
+    </p>
+
+    <p>Si durante el conteo se necesita agregar una tecla se puede hacer click en "Agregar tecla".
+    </p>
+    <p>Si además, durante el conteo por alguna razón el programa se "cuelga" el conteo queda guardado y solo se debe
+        abrir la muestra nuevamente.
+    </p>
+
+    <p>IMPORTANTE.</p>
+    <p>
+        Si está abierta la tabla en Excel y se usa el programa, éste generará un error y no
+        guardará la sesión, por lo tanto es importante cerrar todas las tablas antes de reiniciar
+        los conteos. Asimismo, no se deben agregar descripciones en la tabla ya que cualquier
+        texto adicional dará un error en el siguiente conteo.
+    </p>
+
+    <h2 id="Graficos">Generar gráficos</h2>
+    <p> Para la generación de gráficos se carga primero la tabla de la localidad deseada. Luego, simplemente se debe
+        hacer click en el gráfico deseado seteando o no la opción de incluir un punto con el promedio. Se abrirá una
+        nueva ventana con la imagen que puede ser guardada en diferentes formatos. Además, se agrega una columna a la
+        tabla con la clasificación correspondiente al tipo de gráfico elegido.
+    </p>
+
+    <h1 id="acerca_de">Acerca de</h1>
+    <p>El programa es de código abierto y se encuentra disponible en el siguiente repositorio:
+        <a href="https://github.com/LucasSom/Cont.Ar">https://github.com/LucasSom/Cont.Ar</a>.
+        Está implementado completamente en Python 3.8. Estructuralmente consta de tres secciones: interfaz gráfica,
+        procesamiento de datos y generación de gráficos. Para la interfaz gráfica se utilizó la biblioteca PyQt5,
+        para el procesamiento de los datos y generación de tablas se usó Pandas y los gráficos se basaron en el código
+        de un repositorio abierto (<a href="https://github.com/trqmorgan/QFL-Pettijohn-Ternary">https://github.com/trqmorgan/QFL-Pettijohn-Ternary</a>)
+        específico para generar triángulos QFL.
+    </p>
+    <p>El programa fue testeado en Windows 10, 11 y Ubuntu 20.04 y 22.04 (GNU/Linux) aunque también debería poder funcionar en
+        otras distribuciones de Linux y Mac OS compatibles con las bibliotecas utilizadas.
+    </p>
+    <p>Se agradece cualquier comentario o sugerencia para mejorar el programa. Para ello, comunicarse a través del
+        GitHub: <a href="https://github.com/LucasSom/Cont.Ar">https://github.com/LucasSom/Cont.Ar</a>.</p>
+
+    <p>Desarrollo y programación:
+        <ul>
+            <li>Dra. Maisa Andrea Tunik</li>
+            <li>Lic. Lucas Somacal</li>
+        </ul>
+    </p>
+</body>
+</html>
