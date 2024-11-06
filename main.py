@@ -28,6 +28,6 @@ def notify_user(latest_version, w):
 if __name__ == '__main__':
     app = QtWidgets.QApplication([])
     window = MainWindow()
-    check_for_update("v1.0", window)
+    check_for_update("v1.1", window)
     window.show()
     app.exec_()
