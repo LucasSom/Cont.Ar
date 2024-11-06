@@ -11,7 +11,7 @@ class EditarMapaWindow(Ui_MainWindow):
         self.mapa = parent.mapa
         super(EditarMapaWindow, self).__init__(parent.mapa)
         self.parent = parent
-        self.botonAceptar.clicked.connect(self.guardar)
+        self.botonGuardar.clicked.connect(self.guardar)
 
     def guardar(self):
         mapa_viejo = self.mapa

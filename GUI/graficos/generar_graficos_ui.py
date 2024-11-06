@@ -59,6 +59,13 @@ class Ui_GraficosWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+        self.QFL_boton_dickinson.setStyleSheet(''' font-size: 18px; ''')
+        self.QmFLQp_boton.setStyleSheet(''' font-size: 18px; ''')
+        self.LVLSLm_boton.setStyleSheet(''' font-size: 18px; ''')
+        self.QFL_boton_folk.setStyleSheet(''' font-size: 18px; ''')
+        self.QFL_boton_garzanti.setStyleSheet(''' font-size: 18px; ''')
+        self.checkBox_promedio.setStyleSheet(''' font-size: 18px; ''')
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Generar gráficos"))

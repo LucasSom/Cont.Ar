@@ -85,6 +85,17 @@ class Ui_NuevaMuestraWindow(object):
         self.retranslateUi(NuevaMuestraWindow)
         QtCore.QMetaObject.connectSlotsByName(NuevaMuestraWindow)
 
+        self.label.setStyleSheet(''' font-size: 14px; ''')
+        self.label_2.setStyleSheet(''' font-size: 14px; ''')
+        self.label_3.setStyleSheet(''' font-size: 14px; ''')
+        self.label_5.setStyleSheet(''' font-size: 14px; ''')
+        self.label_6.setStyleSheet(''' font-size: 14px; ''')
+        self.label_7.setStyleSheet(''' font-size: 14px; ''')
+        self.nuevo_mapa_boton.setStyleSheet(''' font-size: 14px; ''')
+        self.cargar_mapa_boton.setStyleSheet(''' font-size: 14px; ''')
+
+
+
     def retranslateUi(self, NuevaMuestraWindow):
         _translate = QtCore.QCoreApplication.translate
         NuevaMuestraWindow.setWindowTitle(_translate("NuevaMuestraWindow", "Nueva muestra"))

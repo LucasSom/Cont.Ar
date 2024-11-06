@@ -23,8 +23,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         QtWidgets.QMainWindow.__init__(self, *args, **kwargs)
         self.setupUi(self)
-        self.pushButton.clicked.connect(self.show_nueva_muestra)
-        self.pushButton_2.clicked.connect(self.cargar_muestra)
+        self.nuevaMuestraButton.clicked.connect(self.show_nueva_muestra)
+        self.cargarMuestraButton.clicked.connect(self.cargar_muestra)
         self.generarGraficosBoton.clicked.connect(self.cargar_tabla)
         self.instruccionesBoton.clicked.connect(self.instrucciones)
 

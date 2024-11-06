@@ -455,10 +455,11 @@ class Ui_MainWindow(QMainWindow):
             self.text_9.setText(mapa["9"])
         self.vbox.addWidget(self.text_9)
 
-        self.botonAceptar = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-        self.botonAceptar.setObjectName("pushButton")
-        self.botonAceptar.setText("Aceptar")
-        self.vbox.addWidget(self.botonAceptar)
+        self.botonGuardar = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
+        self.botonGuardar.setObjectName("pushButton")
+        self.botonGuardar.setText("Guardar")
+        self.botonGuardar.setStyleSheet(''' font-size: 18px; ''')
+        self.vbox.addWidget(self.botonGuardar)
 
         self.widget.setLayout(self.vbox)
 
