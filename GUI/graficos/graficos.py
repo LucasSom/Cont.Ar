@@ -8,10 +8,10 @@ from utils import filtrar_tipo_roca, error_window, info_window
 
 
 class GraficosWindow(QMainWindow, Ui_GraficosWindow):
-    def __init__(self, df, fileName):
+    def __init__(self, df, file_name):
         QMainWindow.__init__(self)
         self.relacion_window = None
-        self.fileName = fileName
+        self.file_name = file_name
         self.df = df
         self.incluir_promedio = False
         self.setupUi(self)
@@ -52,7 +52,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                                                   include_last_row=self.incluir_promedio)
             plt.show()
             self.df[nombre_clasificacion[clasificacion]] = classified_data[nombre_clasificacion[clasificacion]]
-            self.df.to_excel(f"{self.fileName}.xlsx")
+            self.df.to_excel(f"{self.file_name}.xlsx")
 
             df_reescalado = pd.DataFrame({
                 'Q': cuarzos,
@@ -66,7 +66,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
             df_reescalado['L'] = df_reescalado['L'] / sumatoria * 100
 
             df_reescalado[f"Total-{clasificacion}"] = df_reescalado.sum(axis=1)
-            export_path = f"{self.fileName}-QFL.xlsx"
+            export_path = f"{self.file_name}-QFL.xlsx"
             df_reescalado.to_excel(export_path)
 
             info_window(self, f"Tabla guardada en {export_path}")
@@ -90,7 +90,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                                                   include_last_row=self.incluir_promedio)
             plt.show()
             self.df["Dickinson_QmFLQp"] = classified_data["Dickinson_QmFLQp"]
-            self.df.to_excel(f"{self.fileName}.xlsx")
+            self.df.to_excel(f"{self.file_name}.xlsx")
 
             df_reescalado = pd.DataFrame({
                 'Qm': cuarzos_monocristalinos,
@@ -106,7 +106,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
             df_reescalado[f"Total-QmFLQp"] = df_reescalado.sum(axis=1)
 
             df_reescalado.index = self.df.index
-            export_path = f"{self.fileName}-QmFLQp.xlsx"
+            export_path = f"{self.file_name}-QmFLQp.xlsx"
             df_reescalado.to_excel(export_path)
 
             info_window(self, f"Tabla guardada en {export_path}")
@@ -124,7 +124,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
             if df_relacion.index.name != 'Muestra':
                 df_relacion.set_index('Muestra', inplace=True)
 
-            export_path = f"{self.fileName}-Fp_F.xlsx"
+            export_path = f"{self.file_name}-Fp_F.xlsx"
             df_relacion.to_excel(export_path)
 
             info_window(self, f"Tabla guardada en {export_path}")
@@ -159,9 +159,9 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
 
             df_reescalado[f"Total-LvLsLm"] = df_reescalado.sum(axis=1)
 
-            if df_reescalado.index.name != 'Muestra':
+            if df_reescalado.index.nlevels == 1 and df_reescalado.index.name != 'Muestra':
                 df_reescalado.set_index('Muestra', inplace=True)
-            export_path = f"{self.fileName}-LvLsLm.xlsx"
+            export_path = f"{self.file_name}-LvLsLm.xlsx"
             df_reescalado.to_excel(export_path)
 
             info_window(self, f"Tabla guardada en {export_path}")

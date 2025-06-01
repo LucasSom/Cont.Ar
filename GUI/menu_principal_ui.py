@@ -26,13 +26,13 @@ class Ui_MainWindow(object):
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
 
-        self.nuevaMuestraButton = QPushButton("Nueva muestra", self.centralwidget)
-        self.nuevaMuestraButton.setGeometry(QtCore.QRect(20, 20, 281, 91))
-        self.nuevaMuestraButton.setObjectName("pushButton")
+        self.nuevoConteoButton = QPushButton("Nuevo conteo", self.centralwidget)
+        self.nuevoConteoButton.setGeometry(QtCore.QRect(20, 20, 281, 91))
+        self.nuevoConteoButton.setObjectName("pushButton")
 
-        self.cargarMuestraButton = QPushButton("Cargar muestra", self.centralwidget)
-        self.cargarMuestraButton.setGeometry(QtCore.QRect(20, 130, 281, 91))
-        self.cargarMuestraButton.setObjectName("pushButton_2")
+        self.cargarConteoButton = QPushButton("Cargar conteo", self.centralwidget)
+        self.cargarConteoButton.setGeometry(QtCore.QRect(20, 130, 281, 91))
+        self.cargarConteoButton.setObjectName("pushButton_2")
 
         self.generarGraficosBoton = QPushButton("Generar gráficos", self.centralwidget)
         self.generarGraficosBoton.setGeometry(QtCore.QRect(20, 240, 281, 91))
@@ -69,8 +69,8 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-        self.nuevaMuestraButton.setStyleSheet(''' font-size: 24px; ''')
-        self.cargarMuestraButton.setStyleSheet(''' font-size: 24px; ''')
+        self.nuevoConteoButton.setStyleSheet(''' font-size: 24px; ''')
+        self.cargarConteoButton.setStyleSheet(''' font-size: 24px; ''')
         self.generarGraficosBoton.setStyleSheet(''' font-size: 24px; ''')
         self.instruccionesBoton.setStyleSheet(''' font-size: 24px; ''')
         self.label.setStyleSheet(''' font-size: 14px; ''')
@@ -78,8 +78,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "@Cont.Ar"))
-        self.nuevaMuestraButton.setText(_translate("MainWindow", "Nueva muestra"))
-        self.cargarMuestraButton.setText(_translate("MainWindow", "Cargar muestra"))
+        self.nuevoConteoButton.setText(_translate("MainWindow", "Nuevo conteo"))
+        self.cargarConteoButton.setText(_translate("MainWindow", "Cargar conteo"))
         self.generarGraficosBoton.setText(_translate("MainWindow", "Generar gráficos"))
         self.label.setText(_translate("Dialog", "Desarrollo y programación:\n"
                                                 "Dra. Maisa Tunik\n"

@@ -1,6 +1,7 @@
 import os
 import pickle
 
+import numpy as np
 import pandas as pd
 from PyQt5.QtWidgets import QMessageBox
 
@@ -69,3 +70,18 @@ def values_unicity_check(parent, mapa):
         warning_window(parent, "Hay valores duplicados.")
         return False
     return True
+
+
+def es_tabla_legacy(file_name: str) -> bool:
+    df = pd.read_excel(file_name, index_col=0)
+    return 'Localidad' in df.index
+
+
+def to_float(value):
+    if value:
+        value = str(value).replace(',', '.')
+        return float(value)
+    return np.nan
+
+def columnas_rocas(df):
+    return [c for c in df.columns if c not in ["Latitud", "Longitud", "Profundidad"]]

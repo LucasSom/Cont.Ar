@@ -305,8 +305,8 @@ def plot_diagrama(data, top, left, right, matrix=None, plot_type='blank', top_la
     """
     list_valid_types = ['Pettijohn_1977', 'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019', 'Folk', 'blank']
     if plot_type not in list_valid_types:
-        raise ValueError("Plot type not recognised, valid types are 'blank', 'Pettijohn_1977', 'Dickinson_1983_QFL', "
-                         "'Dickinson_1983_QmFLQp', 'Garzanti_2019' and 'Folk'")
+        raise ValueError("Tipo de gráfico no reconocido. Los tipos válidos son: 'blank', 'Pettijohn_1977', "
+                         "'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019' and 'Folk'")
 
     x, y = data_prep(data, top, left, right)
     fig, ax = plt.subplots()
@@ -399,7 +399,7 @@ def plot_diagrama(data, top, left, right, matrix=None, plot_type='blank', top_la
 
         return final_data, fig
 
-    return data.set_index('Muestra') if data.index.name != 'Muestra' else data, fig
+    return data.set_index('Muestra') if data.index.nlevels == 1 and data.index.name != 'Muestra' else data, fig
 
 
 if __name__ == "__main__":
