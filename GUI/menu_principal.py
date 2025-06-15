@@ -81,6 +81,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 for i in indices_posibles:
                     if i in df.columns:
                         indices.append(i)
+                if 'Localidad' in df.columns:
+                    # Llenamos los valores nulos de Localidad hacia adelante
+                    df['Localidad'].ffill(inplace=True)
+                    # Dejamos el último valor de Localidad como None
+                    df.loc[df.shape[0] - 1, 'Localidad'] = None
                 df.set_index(indices, inplace=True)
 
                 self.graficos_window = GraficosWindow(df, os.path.splitext(file_name)[0])

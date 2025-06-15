@@ -50,7 +50,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                                                   plot_type=clasificacion,
                                                   top_label='Q', left_label='F', right_label='L',
                                                   include_last_row=self.incluir_promedio)
-            plt.show()
+            plot.show()
             self.df[nombre_clasificacion[clasificacion]] = classified_data[nombre_clasificacion[clasificacion]]
             self.df.to_excel(f"{self.file_name}.xlsx")
 
@@ -88,7 +88,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                                                   plot_type='Dickinson_1983_QmFLQp',
                                                   top_label='Qm', left_label='F', right_label='L+Qp',
                                                   include_last_row=self.incluir_promedio)
-            plt.show()
+            plot.show()
             self.df["Dickinson_QmFLQp"] = classified_data["Dickinson_QmFLQp"]
             self.df.to_excel(f"{self.file_name}.xlsx")
 
@@ -144,7 +144,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                                                   plot_type='blank',
                                                   top_label='Lv', left_label='Ls', right_label='Lm',
                                                   include_last_row=self.incluir_promedio)
-            plt.show()
+            plot.show()
 
             df_reescalado = pd.DataFrame({
                 'Lv': liticos_volcanicos,
