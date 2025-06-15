@@ -73,8 +73,8 @@ def values_unicity_check(parent, mapa):
 
 
 def es_tabla_legacy(file_name: str) -> bool:
-    df = pd.read_excel(file_name, index_col=0)
-    return 'Localidad' in df.index
+    df = pd.read_excel(file_name)
+    return 'Localidad' not in df.columns
 
 
 def to_float(value):

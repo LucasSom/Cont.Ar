@@ -59,8 +59,7 @@ class Muestra:
                 df_aux["Longitud"] = df_old.shape[0] * ['']
                 df_aux["Profundidad"] = df_old.shape[0] * ['']
 
-                for c in df_old.columns[1:]:
-                    df_aux[c] = df_old.loc[:, c]
+                df_aux = df_aux.join(df_old, on='Muestra')
                 df_old = df_aux.set_index(["Localidad", "Muestra", "Unidad"])
             else:
                 df_old = pd.read_excel(self.nombre_tabla, index_col=[0, 1, 2])
