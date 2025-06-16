@@ -45,34 +45,34 @@ class NuevoConteoWindow(QtWidgets.QMainWindow, Ui_NuevoConteoWindow):
             self.editar_mapa()
 
     def aceptar(self):
-        if self.nombre_muestra.text() == '':
-            warning_window(self, "El campo 'Nombre de muestra' no puede estar vacío.")
-        elif self.localidad.text() == '':
-            warning_window(self, "El campo 'Localidad' no puede estar vacío.")
-        elif self.cantidad_lecturas.value() == 0:
-            warning_window(self, "El campo 'Cantidad de lecturas' tiene que ser mayor que 0.")
-        else:
-            file_name = self.saveFileDialog()
-
-            if self.nombre_unidad.text() == '':
-                nombre_unidad_texto = "Sin unidad"
+        try:
+            if self.nombre_muestra.text() == '':
+                warning_window(self, "El campo 'Nombre de muestra' no puede estar vacío.")
+            elif self.localidad.text() == '':
+                warning_window(self, "El campo 'Localidad' no puede estar vacío.")
+            elif self.cantidad_lecturas.value() == 0:
+                warning_window(self, "El campo 'Cantidad de lecturas' tiene que ser mayor que 0.")
             else:
-                nombre_unidad_texto = self.nombre_unidad.text()
+                file_name = self.saveFileDialog()
 
-            nueva_muestra = Muestra(self.nombre_tabla, self.localidad.text(), self.nombre_muestra.text(),
-                                    nombre_unidad_texto, self.fecha.date().toPyDate(), self.operador.text(),
-                                    self.cantidad_lecturas.value(), self.observaciones.toPlainText(),
-                                    to_float(self.latitud.text()), to_float(self.longitud.text()),
-                                    self.profundidad.value(), self.mapa, file_name)
-            if file_name is not None:
-                guardar_muestra(nueva_muestra, file_name, verbose=True)
+                if self.nombre_unidad.text() == '':
+                    nombre_unidad_texto = "Sin unidad"
+                else:
+                    nombre_unidad_texto = self.nombre_unidad.text()
 
-                try:
+                nueva_muestra = Muestra(self.nombre_tabla, self.localidad.text(), self.nombre_muestra.text(),
+                                        nombre_unidad_texto, self.fecha.date().toPyDate(), self.operador.text(),
+                                        self.cantidad_lecturas.value(), self.observaciones.toPlainText(),
+                                        self.latitud.text(), self.longitud.text(),
+                                        self.profundidad.value(), self.mapa, file_name)
+                if file_name is not None:
+                    guardar_muestra(nueva_muestra, file_name, verbose=True)
+
                     self.sesion_window = SesionWindow(nueva_muestra)
                     self.sesion_window.show()
-                except Exception as e:
-                    error_window(self, e)
-                self.close()
+        except Exception as e:
+            error_window(self, e)
+        self.close()
 
     def cancelar(self):
         self.close()

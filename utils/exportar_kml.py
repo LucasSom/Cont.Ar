@@ -12,8 +12,8 @@ def exportar_kml(data, path, parent):
     for _, row in data.iterrows():
         if pd.isna(row["Latitud"]) or pd.isna(row["Longitud"]):
             if row['Muestra'] != 'Promedio':
-                warning_window(parent, f"Coordenadas inválidas para la muestra {row['Muestra']}.\n"
-                                 f"Se saltará esta muestra.")
+                warning_window(parent, f"Coordenadas geográficas no encontradas para la muestra {row['Muestra']}.\n"
+                                 f"Se saltará esta muestra en el archivo KML.")
         else:
             descripcion = f'Localidad: {row["Localidad"]}\nUnidad: {row["Unidad"]}'
             if "Profundidad" in row and not pd.isna(row["Profundidad"]):

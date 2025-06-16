@@ -4,7 +4,7 @@ from typing import Dict
 
 import pandas as pd
 
-from utils.utils import es_tabla_legacy, columnas_rocas, nombre_clasificacion
+from utils.utils import es_tabla_legacy, columnas_rocas, nombre_clasificacion, convertir_coordenadas
 
 
 class Muestra:
@@ -18,8 +18,8 @@ class Muestra:
         self.operador = operador
         self.cantidad_lecturas = cantidad_lecturas
         self.observaciones = observaciones
-        self.latitud = latitud
-        self.longitud = longitud
+        self.latitud = convertir_coordenadas(latitud)
+        self.longitud = convertir_coordenadas(longitud)
         self.profundidad = profundidad
         self.mapa = mapa
         self.file_name = file_name

@@ -43,6 +43,28 @@ def filtrar_tipo_roca(df: pd.DataFrame, tipo: str) -> pd.DataFrame:
     return df_sum
 
 
+def convertir_coordenadas(coordenadas: str) -> float:
+    """
+    Convierte una cadena de coordenadas en formato 'DD°MM\'SS.SS"' a grados decimales.
+    """
+    if coordenadas == '' or pd.isna(coordenadas):
+        return np.nan
+
+    if ',' in coordenadas or '.' in coordenadas:
+        return to_float(coordenadas)
+
+    coordenadas = coordenadas.upper().replace('°', 'º').replace("''", '"').replace('′', "'").replace("″", '"').strip()
+    direccion = coordenadas[-1]  # Último carácter es la dirección (N, S, E, W)
+    coordenadas = coordenadas[:-1]
+    grados, minutos, segundos = map(float, coordenadas.replace('º', ' ').replace('\'', ' ').replace('"', '').split())
+
+    res = grados + minutos / 60 + segundos / 3600
+    if direccion in ['S', 'O', 'W']:
+        res *= -1
+
+    return res
+
+
 def error_window(parent, e: Exception):
     exception_pop_up = QMessageBox(parent)
     exception_pop_up.setText(f"Se ha producido el siguiente error:\n{e}")
