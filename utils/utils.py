@@ -85,3 +85,12 @@ def to_float(value):
 
 def columnas_rocas(df):
     return [c for c in df.columns if c not in ["Latitud", "Longitud", "Profundidad"]]
+
+
+nombre_clasificacion = {
+    'Pettijohn_1977': "Pettijohn",
+    'Dickinson_1983_QFL': "Dickinson_QFL",
+    'Dickinson_1983_QmFLQp': "Dickinson_QmFLQp",
+    'Garzanti_2019': 'Garzanti',
+    'Folk': 'Folk'
+}

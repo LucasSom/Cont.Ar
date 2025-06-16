@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import QMainWindow
 from matplotlib import pyplot as plt
 
 from GUI.graficos.generar_graficos_ui import Ui_GraficosWindow
-from diagrama import plot_diagrama_interactivo, nombre_clasificacion, plot_diagrama_estatico
-from utils import filtrar_tipo_roca, error_window, info_window
+from diagrama import plot_diagrama_interactivo, plot_diagrama_estatico
+from utils.exportar_kml import exportar_kml
+from utils.utils import filtrar_tipo_roca, error_window, info_window, nombre_clasificacion
 
 
 class GraficosWindow(QMainWindow, Ui_GraficosWindow):
@@ -76,10 +77,12 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                 df_reescalado['L'] = df_reescalado['L'] / sumatoria * 100
 
                 df_reescalado[f"Total-{clasificacion}"] = df_reescalado.sum(axis=1)
-                export_path = f"{self.file_name}-QFL.xlsx"
-                df_reescalado.to_excel(export_path)
+                export_table_path = f"{self.file_name}-QFL.xlsx"
+                df_reescalado.to_excel(export_table_path)
 
-                info_window(self, f"Tabla guardada en {export_path}")
+                exportar_kml(self.df.reset_index(), self.file_name, self)
+
+                info_window(self, f"Tabla guardada en {export_table_path}\ny KML y KMZ exportados en {self.file_name}.kml")
                 if not self.grafico_interactivo:
                     plt.show()
             elif not self.grafico_interactivo:
@@ -135,10 +138,12 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                 df_reescalado[f"Total-QmFLQp"] = df_reescalado.sum(axis=1)
 
                 df_reescalado.index = self.df.index
-                export_path = f"{self.file_name}-QmFLQp.xlsx"
-                df_reescalado.to_excel(export_path)
+                export_table_path = f"{self.file_name}-QmFLQp.xlsx"
+                df_reescalado.to_excel(export_table_path)
 
-                info_window(self, f"Tabla guardada en {export_path}")
+                exportar_kml(self.df.reset_index(), self.file_name, self)
+
+                info_window(self, f"Tabla guardada en {export_table_path}\ny KML y KMZ exportados en {self.file_name}.kml")
 
                 if not self.grafico_interactivo:
                     plt.show()
@@ -231,7 +236,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                 export_path = f"{self.file_name}-LvLsLm.xlsx"
                 df_reescalado.to_excel(export_path)
 
-                info_window(self, f"Tabla guardada en {export_path}")
+                info_window(self, f"Tabla guardada en {export_path}\npero no hay clasificación para guardar en el KML.")
 
                 if not self.grafico_interactivo:
                     plt.show()

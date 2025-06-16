@@ -52,7 +52,7 @@ class Ui_GraficosWindow(object):
         self.checkBox_graficos_interactivos.setChecked(True)
 
         self.checkBox_modificar_tabla = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_modificar_tabla.setGeometry(QtCore.QRect(640, 240, 200, 46))
+        self.checkBox_modificar_tabla.setGeometry(QtCore.QRect(640, 240, 220, 46))
         self.checkBox_modificar_tabla.setObjectName("checkBox_modificar_tabla")
         self.checkBox_modificar_tabla.setChecked(True)
 
@@ -89,7 +89,7 @@ class Ui_GraficosWindow(object):
         self.QFL_boton_garzanti.setText(_translate("MainWindow", "Generar QFL\nGarzanti (2019)"))
         self.checkBox_promedio.setText(_translate("MainWindow", "Incluir promedio"))
         self.checkBox_graficos_interactivos.setText(_translate("MainWindow", "Gráfico interactivo"))
-        self.checkBox_modificar_tabla.setText(_translate("MainWindow", "Guardar tabla\ncon clasificación"))
+        self.checkBox_modificar_tabla.setText(_translate("MainWindow", "Guardar KML y tabla\ncon clasificación"))
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMessageBox, QTableWidget, QListWidget
 
 from GUI.nueva_tecla.EditarTeclaWindow import EditarTeclaWindow
 from GUI.sesion.sesion_ui import Ui_Dialog_Sesion
-from utils import guardar_muestra, error_window, info_window
+from utils.utils import guardar_muestra, error_window, info_window
 
 
 class SesionWindow(QtWidgets.QDialog, Ui_Dialog_Sesion, QtWidgets.QWidget):

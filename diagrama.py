@@ -8,15 +8,9 @@ import pandas as pd
 import plotly.graph_objects as go
 from _plotly_utils.colors import qualitative
 from matplotlib.path import Path
+from utils.utils import nombre_clasificacion
 
 
-nombre_clasificacion = {
-    'Pettijohn_1977': "Pettijohn",
-    'Dickinson_1983_QFL': "Dickinson_QFL",
-    'Dickinson_1983_QmFLQp': "Dickinson_QmFLQp",
-    'Garzanti_2019': 'Garzanti',
-    'Folk': 'Folk'
-}
 y_axis_scale = 2 / (3 ** 0.5)
 
 

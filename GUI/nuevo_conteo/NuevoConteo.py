@@ -7,7 +7,7 @@ from GUI.editar_mapa.EditarMapaWindow import EditarMapaWindow
 from GUI.nuevo_conteo.nuevo_conteo_ui import Ui_NuevoConteoWindow
 from GUI.sesion.Sesion import SesionWindow
 from Muestra import Muestra
-from utils import guardar_muestra, error_window, warning_window, to_float
+from utils.utils import guardar_muestra, error_window, warning_window, to_float
 
 
 class NuevoConteoWindow(QtWidgets.QMainWindow, Ui_NuevoConteoWindow):

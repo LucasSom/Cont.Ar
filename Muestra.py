@@ -4,8 +4,7 @@ from typing import Dict
 
 import pandas as pd
 
-from diagrama import nombre_clasificacion
-from utils import es_tabla_legacy, columnas_rocas
+from utils.utils import es_tabla_legacy, columnas_rocas, nombre_clasificacion
 
 
 class Muestra:

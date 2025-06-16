@@ -10,7 +10,7 @@ from GUI.instrucciones.instrucciones import InstruccionesWindow
 from GUI.menu_principal_ui import Ui_MainWindow
 from GUI.nuevo_conteo.NuevoConteo import NuevoConteoWindow
 from GUI.sesion.Sesion import SesionWindow
-from utils import cargar_archivo_muestra, error_window, file_extension
+from utils.utils import cargar_archivo_muestra, error_window, file_extension
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
