@@ -256,8 +256,8 @@ def field_boundaries(scheme, plotly=False):
     return classifications, labels
 
 
-def plot_diagrama_old(data, top, left, right, matrix=None, plot_type='blank', top_label='', left_label='', right_label='',
-                  grid=True, color='g', size=15, include_last_row=True) -> Tuple[pd.DataFrame, plt.Figure]:
+def plot_diagrama_estatico(data, top, left, right, matrix=None, plot_type='blank', top_label='', left_label='', right_label='',
+                           grid=True, size=20, include_last_row=True) -> Tuple[pd.DataFrame, plt.Figure]:
     """
     Grafica un diagrama triangular. Para QFL top=cuarzo, left=feldespato, right=lítico.
 
@@ -285,22 +285,26 @@ def plot_diagrama_old(data, top, left, right, matrix=None, plot_type='blank', to
         raise ValueError("Tipo de gráfico no reconocido. Los tipos válidos son: 'blank', 'Pettijohn_1977', "
                          "'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019' and 'Folk'")
 
-    x, y = data_prep(data, top, left, right)
     fig, ax = plt.subplots()
+    fig.set_size_inches(9, 5, True)
+
+    x, y = data_prep(data, top, left, right)
     classifications, labs = field_boundaries(plot_type)
 
     for lab in labs:
         ax.text(lab[1], lab[2], lab[0], ha="center", va="center", rotation=lab[3], size=8)
 
-    ax.scatter(x[:-1], y[:-1], color=color, s=size, edgecolor='k', zorder=10)
+    for i, row in data.reset_index().iterrows():
+        label = ' - '.join([x for x in (row['Localidad'], row['Muestra'], row['Unidad']) if pd.notna(x)])
+        ax.scatter(x[i], y[i], cmap='viridis', s=size, edgecolor='k', zorder=10, label=label)
     if include_last_row:
-        ax.scatter(x[-1], y[-1], color='r', s=size+1, edgecolor='k', zorder=10)
-    for i, muestra in enumerate(data.index):
-        if i < len(data.index) - 1 or include_last_row:
-            muestra = list(muestra)
-            while np.nan in muestra:
-                muestra.remove(np.nan)
-            plt.text(x[i] * (1 + 0.01), y[i] * (1 + 0.01), ' - '.join(muestra), fontsize=8)
+        ax.scatter(x[-1], y[-1], color='r', marker='x', s=size+5, edgecolor='k', zorder=10)
+    # for i, muestra in enumerate(data.index):
+    #     if i < len(data.index) - 1 or include_last_row:
+    #         muestra = list(muestra)
+    #         while np.nan in muestra:
+    #             muestra.remove(np.nan)
+    #         plt.text(x[i] * (1 + 0.01), y[i] * (1 + 0.01), ' - '.join(muestra), fontsize=8)
     ax.set_frame_on(False)
     ax.axes.get_xaxis().set_visible(False)
     ax.axes.get_yaxis().set_visible(False)
@@ -310,6 +314,8 @@ def plot_diagrama_old(data, top, left, right, matrix=None, plot_type='blank', to
     ax.text(0.5, 1.05, str(top_label), ha="center", va="center", rotation=0, size=12, zorder=0)
     ax.set_xlim(-0.1, 1.1)
     ax.set_ylim(-0.1, 1.1)
+    ax.legend(loc='best', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()
 
     if grid:
         grid1 = np.linspace(0.1, 0.9, 9)
@@ -366,20 +372,24 @@ def plot_diagrama_old(data, top, left, right, matrix=None, plot_type='blank', to
                     final_data.loc[final_data.index[j], nombre_clasificacion[plot_type]] = classification[0]
                     # add the classification to the column nombre_clasificacion in the datatable
 
-                    if matrix is not None:
-                        if 15 < matrix[j] < 75:  # change the classification if matrix > 15% and less <75%
-                            if classification[0] == 'Sublith Arenite' or classification[0] == 'Lith Arenite':
-                                final_data.loc[j, "Clasificación"] = 'Lithic Wacke'
-                            elif classification[0] == 'Sub Arkose' or classification[0] == 'Arkosic Arenite':
-                                final_data.loc[j, "Clasificación"] = 'Arkosic Wacke'
-                            elif classification[0] == 'Quartz Arenite':
-                                final_data.loc[j, "Clasificación"] = 'Quartz Wacke'
-                        elif matrix[j] > 75:
-                            final_data.loc[j, "Clasificación"] = 'Mudrock'
+                    if matrix is not None and plot_type == 'Pettijohn_1977':
+                        clasificacion_de_otros(classification, final_data, j, matrix)
 
         return final_data, fig
 
     return data.set_index('Muestra') if data.index.nlevels == 1 and data.index.name != 'Muestra' else data, fig
+
+
+def clasificacion_de_otros(classification, final_data, j, matrix):
+    if 15 < matrix[j] < 75:  # change the classification if matrix > 15% and less <75%
+        if classification[0] == 'Sublith Arenite' or classification[0] == 'Lith Arenite':
+            final_data.loc[j, "Clasificación"] = 'Lithic Wacke'
+        elif classification[0] == 'Sub Arkose' or classification[0] == 'Arkosic Arenite':
+            final_data.loc[j, "Clasificación"] = 'Arkosic Wacke'
+        elif classification[0] == 'Quartz Arenite':
+            final_data.loc[j, "Clasificación"] = 'Quartz Wacke'
+    elif matrix[j] > 75:
+        final_data.loc[j, "Clasificación"] = 'Mudrock'
 
 
 def graficar_grilla(fig):
@@ -436,8 +446,8 @@ def graficar_grilla(fig):
     return fig
 
 
-def plot_diagrama(data: pd.DataFrame, top, left, right, matrix=None, plot_type='blank', top_label='', left_label='', right_label='',
-                  color='green', size=5, include_last_row=True):
+def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None, plot_type='blank', top_label='', left_label='', right_label='',
+                              size=5, include_last_row=True):
     x, y = data_prep(data, top, left, right)
     data_reset = data.reset_index()
     df = pd.DataFrame({
@@ -537,7 +547,7 @@ if __name__ == "__main__":
     matrix = data_pct['PM+Cem']
     # for QFL top = quzrtz, left = feldspar, right = lithic
     # plot type options are 'Dickinson_1983', 'Pettijohn_1977' or 'blank'
-    classified_data, plot = plot_diagrama(data, top=quartz, left=fsp, right=lithic, matrix=matrix, plot_type='Pettijohn_1977',
-                                          top_label='Q', left_label='F', right_label='L', color='r', size=15)
+    classified_data, plot = plot_diagrama_interactivo(data, top=quartz, left=fsp, right=lithic, matrix=matrix, plot_type='Pettijohn_1977',
+                                                      top_label='Q', left_label='F', right_label='L', size=15)
     plot.show()
     print(classified_data)
