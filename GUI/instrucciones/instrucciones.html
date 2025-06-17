@@ -38,6 +38,9 @@
             </ul>
         </li>
         <li>
+            <a href="#v2.0">Novedades de la versión 2.0</a>
+        </li>
+        <li>
             <a href="#acerca_de">Acerca de</a>
         </li>
     </ul>
@@ -46,14 +49,17 @@
     <p>El programa consta de 3 secciones: la definición de un nuevo conteo, la sesión de conteo y la generación de
         gráficos con sus tablas asociadas. Cada uno de estos pasos se condice con una opción del menú principal, es
         decir, "Nueva muestra" para definir un nuevo conteo, "Cargar muestra" para seguir una sesión de conteo ya
-        empezada y "Generar gráficos" para generar los gráficos y tablas.
+        empezada y "Generar gráficos" para generar los gráficos, tablas y archivos KML y KMZ con puntos geográficos
+        e información de las muestras.
     </p>
 
     <h2 id="nueva_muestra">Nueva muestra</h2>
-    <p>Al hacer click sobre "Nueva muestra" aparecerá una ventana donde se ingresarán los parámetros de la muestra.
-        <strong>Se debe tener en cuenta que el cálculo de las tablas y de gráficos se realizan sobre las
-            muestras con el mismo nombre de <em>localidad</em></strong>. El sistema diferencia mayúsculas y signos de
-        puntuación. Por otro lado, la cantidad de lecturas determinan cuándo se finalizará automáticamente el conteo.
+    <p>Al hacer click sobre "Nueva muestra" aparecerá una ventana para seleccionar la tabla en la que se agregará el
+        conteo. Si se selecciona una tabla ya existente, esta será modificada. Sino, se creará una nueva tabla con el
+        nombre de archivo especificado. A continuación, aparecerá otra ventana donde se ingresarán los parámetros de la
+        muestra. Las muestras a las que se le asigne una latitud y longitud se podrán exportar a un archivo KML o KMZ.
+        Son obligatorios los campos "Localidad" y "Muestra". Si no se ingresa una "Unidad", por default se rellenará con
+        "Sin unidad".
     </p>
     <p>Para realizar el conteo se emplea un mapa de teclas, es decir, una asignación de una letra o número del teclado
         a un tipo de componente. <strong>El nombre del componente debe comenzar con la abreviatura entre
@@ -67,10 +73,10 @@
         lo guarda en un archivo CSV para luego poder utilizarlo en el conteo. Es importante que si se quieren obtener
         tablas ordenadas, la asignación de teclas se haga en forma alfabética dentro de cada uno de los subtipos.
         Primero se ordenarán los cuarzos (Qmf, Qmo, Qp1), luego los feldespatos con el mismo criterio y lo mismo dentro
-        de los líticos, es decir: Lv (Lítico volcánico) ira en la tabla, después que Lm (Lítico metamórfico) y también
+        de los líticos, es decir: Lv (Lítico volcánico) irá en la tabla, después que Lm (Lítico metamórfico) y también
         después de Ls (Lítico sedimentario). En el caso de querer discriminar entre varios tipos de líticos dentro de
-        un mismo grupo, se recomienda usar Lv1, Lv2 o Lva, Lvb etc. Para poder usar el diagrama de discriminación
-        (Ls-Lv-Lm) se asignen las teclas iniciales correctamente.
+        un mismo grupo, se recomienda usar Lv1, Lv2 o Lva, Lvb etc. ya que se podrán usar para el diagrama de
+        discriminación (Ls-Lv-Lm).
     </p>
     <p>
         Para iniciar el conteo, al crear una nueva muestra, hacer click en "Cargar mapa de teclas" donde se puede
@@ -101,26 +107,45 @@
         abrir la muestra nuevamente.
     </p>
 
-    <p>IMPORTANTE.</p>
-    <p>
-        Si está abierta la tabla en Excel y se usa el programa, éste generará un error y no
+    <p><strong>IMPORTANTE:</strong>
+        Si está abierta la tabla en Excel y se usa el programa, éste puede generar un error y no
         guardará la sesión, por lo tanto es importante cerrar todas las tablas antes de reiniciar
         los conteos. Asimismo, no se deben agregar descripciones en la tabla ya que cualquier
-        texto adicional dará un error en el siguiente conteo.
+        texto adicional puede dar un error en el siguiente conteo.
     </p>
 
     <h2 id="Graficos">Generar gráficos</h2>
-    <p> Para la generación de gráficos se carga primero la tabla de la localidad deseada. Luego, simplemente se debe
-        hacer click en el gráfico deseado seteando o no la opción de incluir un punto con el promedio. Se abrirá una
-        nueva ventana con la imagen que puede ser guardada en diferentes formatos. Además, se agrega una columna a la
-        tabla con la clasificación correspondiente al tipo de gráfico elegido.
+    <p> Para la generación de gráficos se carga primero la tabla deseada. Luego, simplemente se debe
+        hacer click en el gráfico deseado seteando o no la opción de incluir un punto con el promedio. Además, se cuenta
+        con dos opciones adicionales:
     </p>
+    <ul>
+        <li> <i>Gráfico interactivo</i>: permite interactuar con el gráfico, es decir, al pasar el mouse por encima
+            de un punto se muestra la información de la muestra. Caso contrario, se crea un gráfico estático que se
+            puede guardar en diversos formatospensado para publicar.</li>
+        <li> <i>Guardar KML y tabla con clasificación</i>: genera un archivo KML y otro KMZ con puntos de las
+            muestras en las que se especificaron las coordenadas geográficas. Estos archivos pueden luego abrirse
+            con QGis o programas similares. Además, se modifica la tabla original agregándose una columna con la
+            clasificación correspondiente al diagrama seleccionado.</li>
+    </ul>
+
+    <h1 id="v2.0">Novedades de la versión 2.0</h1>
+    <p>En esta nueva versión se agregó:</p>
+    <ul>
+        <li>Nuevos parámetros de muestra: Unidad, Latitud, Longitud y Profundidad (m)</li>
+        <li>El campo Localidad pasa a ser obligatorio.</li>
+        <li>La elección de la tabla donde almacenar todos los conteos en lugar de ser por default la de la Localidad.</li>
+        <li>Generación de gráficos interactivos.</li>
+        <li>Generación de archivos KML y KMZ con puntos geográficos e información de las muestras.</li>
+    </ul>
+    <p>Las tablas de la versión 1.1 son compatibles con la nueva versión pero se modifican para incluir los nuevos
+        campos.</p>
 
     <h1 id="acerca_de">Acerca de</h1>
     <p>El programa es de código abierto y se encuentra disponible en el siguiente repositorio:
         <a href="https://github.com/LucasSom/Cont.Ar">https://github.com/LucasSom/Cont.Ar</a>.
         Está implementado completamente en Python 3.8. Estructuralmente consta de tres secciones: interfaz gráfica,
-        procesamiento de datos y generación de gráficos. Para la interfaz gráfica se utilizó la biblioteca PyQt5,
+        procesamiento de datos y generación de gráficos y KML. Para la interfaz gráfica se utilizó la biblioteca PyQt5,
         para el procesamiento de los datos y generación de tablas se usó Pandas y los gráficos se basaron en el código
         de un repositorio abierto (<a href="https://github.com/trqmorgan/QFL-Pettijohn-Ternary">https://github.com/trqmorgan/QFL-Pettijohn-Ternary</a>)
         específico para generar triángulos QFL.
@@ -128,14 +153,13 @@
     <p>El programa fue testeado en Windows 10, 11 y Ubuntu 20.04 y 22.04 (GNU/Linux) aunque también debería poder funcionar en
         otras distribuciones de Linux y Mac OS compatibles con las bibliotecas utilizadas.
     </p>
-    <p>Se agradece cualquier comentario o sugerencia para mejorar el programa. Para ello, comunicarse a través del
-        GitHub: <a href="https://github.com/LucasSom/Cont.Ar">https://github.com/LucasSom/Cont.Ar</a>.</p>
+    <p>Se agradece cualquier comentario o sugerencia para mejorar el programa. Para ello, crear un nuevo "issue" a
+        través de <a href="https://github.com/LucasSom/Cont.Ar/issues">GitHub</a>.</p>
 
-    <p>Desarrollo y programación:
-        <ul>
-            <li>Dra. Maisa Andrea Tunik</li>
-            <li>Lic. Lucas Somacal</li>
-        </ul>
-    </p>
+    <p>Desarrollo y programación:</p>
+    <ul>
+        <li>Dra. Maisa Andrea Tunik</li>
+        <li>Lic. Lucas Somacal</li>
+    </ul>
 </body>
 </html>
