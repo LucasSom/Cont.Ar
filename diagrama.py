@@ -280,7 +280,7 @@ def plot_diagrama_estatico(data, top, left, right, matrix=None, plot_type='blank
                          "'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019' and 'Folk'")
 
     fig, ax = plt.subplots()
-    fig.set_size_inches(9, 5, True)
+    # fig.set_size_inches(9, 5, True)
 
     x, y = data_prep(data, top, left, right)
     classifications, labs = field_boundaries(plot_type)
@@ -289,8 +289,11 @@ def plot_diagrama_estatico(data, top, left, right, matrix=None, plot_type='blank
         ax.text(lab[1], lab[2], lab[0], ha="center", va="center", rotation=lab[3], size=8)
 
     for i, row in data.reset_index().iterrows():
-        label = ' - '.join([x for x in (row['Localidad'], row['Muestra'], row['Unidad']) if pd.notna(x)])
-        ax.scatter(x[i], y[i], cmap='viridis', s=size, edgecolor='k', zorder=10, label=label)
+        if row['Muestra'] != "Promedio":
+            localidad = row['Localidad'] if row['Localidad'] else None
+            unidad = row['Unidad'] if row['Unidad'] else None
+            label = ' - '.join([x for x in (localidad, row['Muestra'], unidad) if pd.notna(x)])
+            ax.scatter(x[i], y[i], cmap='viridis', s=size, edgecolor='k', zorder=10, label=label)
     if include_last_row:
         ax.scatter(x[-1], y[-1], color='r', marker='x', s=size+5, edgecolor='k', zorder=10)
     # for i, muestra in enumerate(data.index):
