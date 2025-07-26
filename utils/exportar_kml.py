@@ -9,23 +9,26 @@ def exportar_kml(data, path, parent):
     kml = simplekml.Kml()
 
     # Recorrer cada fila y agregar un punto al KML
+    sin_coordenadas = False
     for _, row in data.iterrows():
         if pd.isna(row["Latitud"]) or pd.isna(row["Longitud"]):
-            if row['Muestra'] != 'Promedio':
-                warning_window(parent, f"Coordenadas geográficas no encontradas para la muestra {row['Muestra']}.\n"
-                                 f"Se saltará esta muestra en el archivo KML.")
+            if row['Muestra'] != 'Promedio'  and not sin_coordenadas:
+                warning_window(parent, f"Hay muestras sin coordenadas geográficas.\n"
+                                       f"Se saltarán en el archivo KML.")
+                sin_coordenadas = True
         else:
-            descripcion = f'Localidad: {row["Localidad"]}\nUnidad: {row["Unidad"]}'
+            punto = kml.newpoint(name=row["Muestra"],
+                                 coords=[(row["Longitud"], row["Latitud"])],
+                                 )
+            punto.extendeddata.newdata(name="Localidad", value=row["Localidad"])
+            punto.extendeddata.newdata(name="Unidad", value=row["Unidad"])
             if "Profundidad" in row and not pd.isna(row["Profundidad"]):
-                descripcion += f'\nProfundidad: {row["Profundidad"]}m'
+                punto.extendeddata.newdata(name="Profundidad", value=f"{int(row["Profundidad"])}m")
             for clasificacion in nombre_clasificacion.values():
                 if clasificacion in row and not pd.isna(row[clasificacion]):
-                    descripcion += f'\n{clasificacion}: {row[clasificacion]}'
+                    punto.extendeddata.newdata(name=clasificacion, value=row[clasificacion])
 
-            kml.newpoint(name=row["Muestra"],
-                         coords=[(row["Longitud"], row["Latitud"])],
-                         description=descripcion,
-                         )
+
 
     # Guardar como archivo KML
     kml.save(f"{path}.kml")
