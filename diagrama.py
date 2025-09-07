@@ -443,8 +443,8 @@ def graficar_grilla(fig):
     return fig
 
 
-def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None, plot_type='blank', top_label='', left_label='', right_label='',
-                              size=5, include_last_row=True):
+def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None, plot_type='blank', top_label='',
+                              left_label='', right_label='', size=5, include_last_row=True):
     x, y = data_prep(data, top, left, right)
     data_reset = data.reset_index()
     df = pd.DataFrame({
@@ -468,7 +468,6 @@ def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None,
         fig.add_trace(go.Scatter(
             x=xs, y=ys, fill='toself', mode='lines',
             line=dict(color='black', width=1),
-            # fillcolor='rgba(50,50,50,0.1)' if plot_type != 'blank' else 'rgba(0,0,0,0)',
             fillcolor='rgba(0,0,0,0)',
             name=classification[0],
             showlegend=False
@@ -477,6 +476,9 @@ def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None,
     # Add scatter points
     localidades = df['Localidad'].unique()
     colours = qualitative.Plotly * (len(localidades) // len(qualitative.Plotly)) + qualitative.Plotly[:len(localidades) % len(qualitative.Plotly)]
+
+    # Lista para almacenar índices de anotaciones de muestra
+    muestra_annotations_indices = []
 
     for localidad, color in zip(localidades, colours):
         subset = df[df['Localidad'] == localidad]
@@ -490,22 +492,48 @@ def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None,
                 line=dict(width=1, color='DarkSlateGrey')
             ),
             name=localidad,
-            customdata=subset[['Muestra', 'Unidad']],
+            customdata=subset[['Localidad', 'Muestra', 'Unidad']],
             hovertemplate=(
-                    "<b>Localidad</b>: %{text}<br>" +
-                    "<b>Muestra</b>: %{customdata[0]}<br>" +
-                    "<b>Unidad</b>: %{customdata[1]}<br>" +
+                    "<b>Localidad</b>: %{customdata[0]}<br>" +
+                    "<b>Muestra</b>: %{customdata[1]}<br>" +
+                    "<b>Unidad</b>: %{customdata[2]}<br>" +
                     "<extra></extra>"
             ),
             text=subset['Localidad']
         ))
+        # Add scatter points with text labels
+        for _, s in subset.iterrows():
+            fig.add_trace(go.Scatter(
+                x=[s['x']],
+                y=[s['y']],
+                mode='markers+text',
+                marker=dict(
+                    size=size,
+                    color=color,
+                    line=dict(width=1, color='DarkSlateGrey')
+                ),
+                text=s['Muestra'],
+                textposition="top center",
+                textfont=dict(size=12, color=color),
+                name=localidad,
+                customdata=[[s['Localidad'], s['Muestra'], s['Unidad']]],
+                hovertemplate=(
+                        "<b>Localidad</b>: %{customdata[0]}<br>" +
+                        "<b>Muestra</b>: %{customdata[1]}<br>" +
+                        "<b>Unidad</b>: %{customdata[2]}<br>" +
+                        "<extra></extra>"
+                ),
+                showlegend=False,
+                visible=True
+            ))
+            muestra_annotations_indices.append(len(fig.data) - 1)
 
     # Add last row in red if needed
     if include_last_row:
         fig.add_trace(go.Scatter(
             x=[x[-1]], y=[y[-1]],
             mode='markers',
-            marker=dict(color='red', size=size+1, line=dict(color='black', width=1)),
+            marker=dict(color='red', size=size + 1, line=dict(color='black', width=1)),
             name='Promedio'
         ))
 
@@ -516,15 +544,41 @@ def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None,
 
     # Add field labels
     for lab in labs:
-        fig.add_annotation(x=lab[1], y=lab[2], text=lab[0], showarrow=False, font=dict(size=8), textangle=0)#-9/10 * lab[3])
+        fig.add_annotation(x=lab[1], y=lab[2], text=lab[0], showarrow=False, font=dict(size=8), textangle=0)
+
+    # Crear botones para mostrar/ocultar etiquetas de muestra
+    buttons = [
+        dict(
+            args=[{"visible": True}],
+            label="Mostrar nombre de muestra",
+            method="restyle",
+            args2=[{"visible": True}]
+        ),
+        dict(
+            args=[{"visible": [False if i in muestra_annotations_indices else True for i in range(len(fig.data))]}],
+            label="Ocultar nombre de muestra",
+            method="restyle"
+        )
+    ]
 
     # Update layout
     fig.update_layout(
         xaxis=dict(visible=False, range=[-0.1, 1.1]),
         yaxis=dict(visible=False, range=[-0.1, 1.1]),
         plot_bgcolor='white',
-        margin=dict(l=0, r=0, t=0, b=0),
-        legend_title_text='Localidad'
+        margin=dict(l=0, r=0, t=30, b=0),  # Aumentar margen superior para los botones
+        legend_title_text='Localidad',
+        updatemenus=[
+            dict(
+                type="dropdown",
+                direction="down",
+                buttons=buttons,
+                x=0.1,
+                xanchor="left",
+                y=1.05,
+                yanchor="top"
+            )
+        ]
     )
 
     return data, fig
