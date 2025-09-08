@@ -162,7 +162,7 @@ class Ui_Dialog_Sesion(object):
                 i += 1
 
     def imprimir_conteo_inicial(self):
-        componentes = self.Dialog.muestra.getComponentesCount()
+        componentes = self.Dialog.muestra.get_componentes_count()
         total = 0
         for i, (componente, cantidad) in enumerate(componentes.items()):
             self.tableView.setItem(i, 0, QtWidgets.QTableWidgetItem(componente))

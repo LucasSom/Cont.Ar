@@ -1,5 +1,6 @@
 import os
 import pickle
+from typing import Optional
 
 import numpy as np
 import pandas as pd
@@ -34,6 +35,17 @@ def cargar_archivo_muestra(file_name: str, verbose=False):
         p = pickle.load(f)
         if verbose: print("Loaded file:", f)
         return p
+
+
+def leer_tabla(nombre_tabla, index_col=None) -> Optional[pd.DataFrame]:
+    if file_extension(nombre_tabla) == ".csv":
+        df = pd.read_csv(nombre_tabla, index_col=index_col)
+    elif file_extension(nombre_tabla) == ".xlsx":
+        df = pd.read_excel(nombre_tabla, index_col=index_col)
+    else:
+        error_window(None, Exception("El archivo de tabla debe ser .csv o .xlsx"))
+        return None
+    return df
 
 
 def filtrar_tipo_roca(df: pd.DataFrame, tipo: str) -> pd.DataFrame:

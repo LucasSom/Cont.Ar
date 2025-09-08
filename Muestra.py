@@ -4,7 +4,8 @@ from typing import Dict
 
 import pandas as pd
 
-from utils.utils import es_tabla_legacy, columnas_rocas, nombre_clasificacion, convertir_coordenadas
+from utils.utils import es_tabla_legacy, columnas_rocas, nombre_clasificacion, convertir_coordenadas, file_extension, \
+    leer_tabla
 
 
 class Muestra:
@@ -47,7 +48,7 @@ class Muestra:
         if os.path.isfile(self.nombre_tabla):
             # Determino si la tabla es legacy o no
             if es_tabla_legacy(self.nombre_tabla):
-                df_old = pd.read_excel(self.nombre_tabla, index_col=0)
+                df_old = self.leer_tabla(nombre_tabla=self.nombre_tabla)
                 df_old.drop(["Promedio"], inplace=True)
 
                 df_aux = pd.DataFrame()
@@ -61,7 +62,7 @@ class Muestra:
                 df_aux = df_aux.join(df_old, on='Muestra')
                 df_old = df_aux.set_index(["Localidad", "Muestra", "Unidad"])
             else:
-                df_old = pd.read_excel(self.nombre_tabla, index_col=[0, 1, 2])
+                df_old = leer_tabla(self.nombre_tabla, index_col=[0, 1, 2])
                 df_old.drop(index="Promedio", level=1, inplace=True)
 
             for clasificacion in nombre_clasificacion.values():
@@ -99,14 +100,18 @@ class Muestra:
             return Qs + Fs + Ls + Os
 
         df_new = df_new[["Latitud", "Longitud", "Profundidad"] + ordenar_columnas(df_new.columns)]
-        df_new.to_excel(self.nombre_tabla, index_label=['Localidad', 'Muestra', 'Unidad'])
+        if file_extension(self.nombre_tabla) == '.csv':
+            df_new.to_csv(self.nombre_tabla, index_label=['Localidad', 'Muestra', 'Unidad'])
+        else:
+            df_new.to_excel(self.nombre_tabla, index_label=['Localidad', 'Muestra', 'Unidad'])
 
         return self.nombre_tabla
 
-    def getComponentesCount(self) -> Dict[str, int]:
+    def get_componentes_count(self) -> Dict[str, int]:
         d = dict(Counter(self.componentes))
         for nombres_rocas in self.mapa.values():
             if nombres_rocas not in d and nombres_rocas != '':
                 d[nombres_rocas] = 0
 
         return d
+

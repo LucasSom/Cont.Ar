@@ -10,7 +10,7 @@ from GUI.instrucciones.instrucciones import InstruccionesWindow
 from GUI.menu_principal_ui import Ui_MainWindow
 from GUI.nuevo_conteo.NuevoConteo import NuevoConteoWindow
 from GUI.sesion.Sesion import SesionWindow
-from utils.utils import cargar_archivo_muestra, error_window, file_extension
+from utils.utils import cargar_archivo_muestra, error_window, file_extension, warning_window
 
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
@@ -34,6 +34,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         if nombre_tabla is not None:
             self.nuevo_conteo_w = NuevoConteoWindow(nombre_tabla)
             self.nuevo_conteo_w.show()
+        else:
+            warning_window(self, "No se seleccionó un archivo para guardar la tabla.")
 
     def saveFileDialog(self):
         file_name, _ = QFileDialog.getSaveFileName(self, "Cargar o crear tabla", userpaths.get_my_documents(),
