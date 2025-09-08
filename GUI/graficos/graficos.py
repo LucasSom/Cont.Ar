@@ -97,8 +97,7 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                 plt.close()
                 classified_data, plot = plot_diagrama_interactivo(self.df,
                                                                   top=cuarzos, left=feldespatos,
-                                                                  right=liticos, matrix=otros,
-                                                                  plot_type=clasificacion,
+                                                                  right=liticos, plot_type=clasificacion,
                                                                   top_label='Q', left_label='F', right_label='L',
                                                                   include_last_row=self.incluir_promedio)
                 plot.show()
@@ -164,7 +163,6 @@ class GraficosWindow(QMainWindow, Ui_GraficosWindow):
                                                                   top=cuarzos_monocristalinos,
                                                                   left=feldespatos,
                                                                   right=liticos + cuarzos_policristalinos,
-                                                                  matrix=None,
                                                                   plot_type='Dickinson_1983_QmFLQp',
                                                                   top_label='Qm', left_label='F', right_label='L+Qp',
                                                                   include_last_row=self.incluir_promedio)

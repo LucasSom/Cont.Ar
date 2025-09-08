@@ -8,8 +8,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from _plotly_utils.colors import qualitative
 from matplotlib.path import Path
-from utils.utils import nombre_clasificacion
-
+from utils.utils import nombre_clasificacion, warning_window
 
 y_axis_scale = 2 / (3 ** 0.5)
 
@@ -280,7 +279,6 @@ def plot_diagrama_estatico(data, top, left, right, matrix=None, plot_type='blank
                          "'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019' and 'Folk'")
 
     fig, ax = plt.subplots()
-    # fig.set_size_inches(9, 5, True)
 
     x, y = data_prep(data, top, left, right)
     classifications, labs = field_boundaries(plot_type)
@@ -288,23 +286,26 @@ def plot_diagrama_estatico(data, top, left, right, matrix=None, plot_type='blank
     for lab in labs:
         ax.text(lab[1], lab[2], lab[0], ha="center", va="center", rotation=lab[3], size=8)
 
+    localidades = data.reset_index()['Localidad'].unique()
+    if len(localidades) > 10:
+        warning_window(None, f"Se han detectado {len(localidades)} localidades distintas.\n"
+                       f"El diagrama soporta hasta 10 formas de punto distintas.")
+    possible_markers = ['o', 's', '^', 'D', 'v', 'P', '*', 'x', 'h', '.']
+    marker_dict = {loc: possible_markers[i % len(possible_markers)] for i, loc in enumerate(localidades)}
+
     for i, row in data.reset_index().iterrows():
         if row['Muestra'] != "Promedio":
             localidad = row['Localidad'] if row['Localidad'] else None
             unidad = row['Unidad'] if row['Unidad'] else None
             label = ' - '.join([x for x in (localidad, row['Muestra'], unidad) if pd.notna(x)])
-            ax.scatter(x[i], y[i], cmap='viridis', s=size, edgecolor='k', zorder=10, label=label)
+            ax.scatter(x[i], y[i], cmap='viridis', s=size, edgecolor='k', zorder=10, label=label, marker=marker_dict[row['Localidad']])
     if include_last_row:
-        ax.scatter(x[-1], y[-1], color='r', marker='x', s=size+5, edgecolor='k', zorder=10)
-    # for i, muestra in enumerate(data.index):
-    #     if i < len(data.index) - 1 or include_last_row:
-    #         muestra = list(muestra)
-    #         while np.nan in muestra:
-    #             muestra.remove(np.nan)
-    #         plt.text(x[i] * (1 + 0.01), y[i] * (1 + 0.01), ' - '.join(muestra), fontsize=8)
+        ax.scatter(x[-1], y[-1], color='r', marker='X', s=size+5, edgecolor='k', zorder=10)
+
     ax.set_frame_on(False)
     ax.axes.get_xaxis().set_visible(False)
     ax.axes.get_yaxis().set_visible(False)
+
     # label the apexes of the triangle
     ax.text(-0.02, -0.04, str(left_label), ha="center", va="center", rotation=0, size=12)
     ax.text(1.02, -0.04, str(right_label), ha="center", va="center", rotation=0, size=12)
@@ -443,8 +444,37 @@ def graficar_grilla(fig):
     return fig
 
 
-def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, matrix=None, plot_type='blank', top_label='',
+def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, plot_type='blank', top_label='',
                               left_label='', right_label='', size=5, include_last_row=True):
+    """ Genera un diagrama triangular interactivo usando Plotly.
+    Parameters
+    ----------
+    data: pd.DataFrame
+        DataFrame con los datos a graficar. Debe contener las columnas 'Localidad', 'Muestra' y 'Unidad'.
+    top: Union[str, np.ndarray]
+        Valores o nombre de columna para el vértice superior del triángulo.
+    left: Union[str, np.ndarray]
+        Valores o nombre de columna para el vértice izquierdo del triángulo.
+    right: Union[str, np.ndarray]
+        Valores o nombre de columna para el vértice derecho del triángulo.
+    plot_type: str
+        Tipo de diagrama a generar ('blank', 'Pettijohn_1977', 'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019', 'Folk'). Default 'blank'.
+    top_label: str
+        Etiqueta para el vértice superior. Default ''.
+    left_label: str
+        Etiqueta para el vértice izquierdo. Default ''.
+    right_label: str
+        Etiqueta para el vértice derecho. Default ''.
+    size: int
+        Tamaño de los puntos. Default 5.
+    include_last_row: bool
+        Si se incluye la última fila del DataFrame como promedio. Default True.
+
+    Returns
+    -------
+    Tuple[pd.DataFrame, go.Figure]
+        DataFrame original y figura de Plotly con el diagrama triangular interactivo.
+    """
     x, y = data_prep(data, top, left, right)
     data_reset = data.reset_index()
     df = pd.DataFrame({
@@ -598,7 +628,8 @@ if __name__ == "__main__":
     matrix = data_pct['PM+Cem']
     # for QFL top = quzrtz, left = feldspar, right = lithic
     # plot type options are 'Dickinson_1983', 'Pettijohn_1977' or 'blank'
-    classified_data, plot = plot_diagrama_interactivo(data, top=quartz, left=fsp, right=lithic, matrix=matrix, plot_type='Pettijohn_1977',
+    classified_data, plot = plot_diagrama_interactivo(data, top=quartz, left=fsp, right=lithic,
+                                                      plot_type='Pettijohn_1977',
                                                       top_label='Q', left_label='F', right_label='L', size=15)
     plot.show()
     print(classified_data)
