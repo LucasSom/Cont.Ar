@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QMessageBox, QTableWidget, QListWidget
 
 from GUI.nueva_tecla.EditarTeclaWindow import EditarTeclaWindow
 from GUI.sesion.sesion_ui import Ui_Dialog_Sesion
-from utils import guardar_muestra, error_window, info_window
+from utils.utils import guardar_muestra, error_window, info_window
 
 
 class SesionWindow(QtWidgets.QDialog, Ui_Dialog_Sesion, QtWidgets.QWidget):
@@ -69,9 +69,9 @@ class SesionWindow(QtWidgets.QDialog, Ui_Dialog_Sesion, QtWidgets.QWidget):
                 finalizarPopUp.setIcon(QMessageBox.Information)
                 finalizarPopUp.exec()
 
-                mapa_fileName = self.muestra.exportar_datos()
+                mapa_file_name = self.muestra.exportar_datos()
 
-                info_window(self, f"Se guardó la tabla de resultados en:\n{mapa_fileName}")
+                info_window(self, f"Se guardó la tabla de resultados en:\n{mapa_file_name}")
 
                 self.close()
             else:
@@ -112,4 +112,4 @@ class SesionWindow(QtWidgets.QDialog, Ui_Dialog_Sesion, QtWidgets.QWidget):
 
     def guardar(self):
         self.muestra.componentes = [self.listwidgetRocas.item(i).text() for i in range(self.listwidgetRocas.count())]
-        guardar_muestra(self.muestra, self.muestra.fileName)
+        guardar_muestra(self.muestra, self.muestra.file_name)

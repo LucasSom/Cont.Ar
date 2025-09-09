@@ -43,8 +43,18 @@ class Ui_GraficosWindow(object):
         self.QFL_boton_garzanti.setObjectName("QFL_boton_garzanti")
 
         self.checkBox_promedio = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_promedio.setGeometry(QtCore.QRect(400, 240, 161, 23))
+        self.checkBox_promedio.setGeometry(QtCore.QRect(20, 251, 200, 23))
         self.checkBox_promedio.setObjectName("checkBox_promedio")
+
+        self.checkBox_graficos_interactivos = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_graficos_interactivos.setGeometry(QtCore.QRect(330, 251, 200, 23))
+        self.checkBox_graficos_interactivos.setObjectName("checkBox_graficos_interactivos")
+        self.checkBox_graficos_interactivos.setChecked(True)
+
+        self.checkBox_modificar_tabla = QtWidgets.QCheckBox(self.centralwidget)
+        self.checkBox_modificar_tabla.setGeometry(QtCore.QRect(640, 240, 220, 46))
+        self.checkBox_modificar_tabla.setObjectName("checkBox_modificar_tabla")
+        self.checkBox_modificar_tabla.setChecked(True)
 
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -65,6 +75,8 @@ class Ui_GraficosWindow(object):
         self.QFL_boton_folk.setStyleSheet(''' font-size: 18px; ''')
         self.QFL_boton_garzanti.setStyleSheet(''' font-size: 18px; ''')
         self.checkBox_promedio.setStyleSheet(''' font-size: 18px; ''')
+        self.checkBox_graficos_interactivos.setStyleSheet(''' font-size: 18px; ''')
+        self.checkBox_modificar_tabla.setStyleSheet(''' font-size: 18px; ''')
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -76,6 +88,8 @@ class Ui_GraficosWindow(object):
         self.QFL_boton_folk.setText(_translate("MainWindow", "Generar QFL\nFolk et al. (1970)"))
         self.QFL_boton_garzanti.setText(_translate("MainWindow", "Generar QFL\nGarzanti (2019)"))
         self.checkBox_promedio.setText(_translate("MainWindow", "Incluir promedio"))
+        self.checkBox_graficos_interactivos.setText(_translate("MainWindow", "Gráfico interactivo"))
+        self.checkBox_modificar_tabla.setText(_translate("MainWindow", "Guardar KML y tabla\ncon clasificación"))
 
 
 if __name__ == "__main__":

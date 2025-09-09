@@ -1,7 +1,7 @@
 from GUI.nueva_tecla.nueva_tecla_ui import Ui_Dialog_Editar_Tecla
 from PyQt5 import QtWidgets
 
-from utils import values_unicity_check
+from utils.utils import values_unicity_check
 
 
 class EditarTeclaWindow(QtWidgets.QDialog, Ui_Dialog_Editar_Tecla):

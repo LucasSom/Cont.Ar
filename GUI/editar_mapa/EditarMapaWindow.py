@@ -3,7 +3,7 @@ import userpaths
 from PyQt5.QtWidgets import QFileDialog
 
 from GUI.editar_mapa.editar_mapa_ui import Ui_MainWindow
-from utils import file_extension, values_unicity_check
+from utils.utils import file_extension, values_unicity_check
 
 
 class EditarMapaWindow(Ui_MainWindow):

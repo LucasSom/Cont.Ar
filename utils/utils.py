@@ -1,6 +1,8 @@
 import os
 import pickle
+from typing import Optional
 
+import numpy as np
 import pandas as pd
 from PyQt5.QtWidgets import QMessageBox
 
@@ -35,11 +37,44 @@ def cargar_archivo_muestra(file_name: str, verbose=False):
         return p
 
 
+def leer_tabla(nombre_tabla, index_col=None) -> Optional[pd.DataFrame]:
+    if file_extension(nombre_tabla) == ".csv":
+        df = pd.read_csv(nombre_tabla, index_col=index_col)
+    elif file_extension(nombre_tabla) == ".xlsx":
+        df = pd.read_excel(nombre_tabla, index_col=index_col)
+    else:
+        error_window(None, Exception("El archivo de tabla debe ser .csv o .xlsx"))
+        return None
+    return df
+
+
 def filtrar_tipo_roca(df: pd.DataFrame, tipo: str) -> pd.DataFrame:
     columnas = [c for c in df.columns if c[1:len(tipo) + 1] == tipo]
     df_sum = df[columnas].sum(axis=1)
     df_sum.index = df.index
     return df_sum
+
+
+def convertir_coordenadas(coordenadas: str) -> float:
+    """
+    Convierte una cadena de coordenadas en formato 'DD°MM\'SS.SS"' a grados decimales.
+    """
+    if coordenadas == '' or pd.isna(coordenadas):
+        return np.nan
+
+    if ',' in coordenadas or '.' in coordenadas:
+        return to_float(coordenadas)
+
+    coordenadas = coordenadas.upper().replace('°', 'º').replace("''", '"').replace('′', "'").replace("″", '"').strip()
+    direccion = coordenadas[-1]  # Último carácter es la dirección (N, S, E, W)
+    coordenadas = coordenadas[:-1]
+    grados, minutos, segundos = map(float, coordenadas.replace('º', ' ').replace('\'', ' ').replace('"', '').split())
+
+    res = grados + minutos / 60 + segundos / 3600
+    if direccion in ['S', 'O', 'W']:
+        res *= -1
+
+    return res
 
 
 def error_window(parent, e: Exception):
@@ -69,3 +104,27 @@ def values_unicity_check(parent, mapa):
         warning_window(parent, "Hay valores duplicados.")
         return False
     return True
+
+
+def es_tabla_legacy(file_name: str) -> bool:
+    df = pd.read_excel(file_name)
+    return 'Localidad' not in df.columns
+
+
+def to_float(value):
+    if value:
+        value = str(value).replace(',', '.')
+        return float(value)
+    return np.nan
+
+def columnas_rocas(df):
+    return [c for c in df.columns if c not in ["Latitud", "Longitud", "Profundidad"]]
+
+
+nombre_clasificacion = {
+    'Pettijohn_1977': "Pettijohn",
+    'Dickinson_1983_QFL': "Dickinson_QFL",
+    'Dickinson_1983_QmFLQp': "Dickinson_QmFLQp",
+    'Garzanti_2019': 'Garzanti',
+    'Folk': 'Folk'
+}

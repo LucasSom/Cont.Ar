@@ -2,7 +2,7 @@ import requests
 from PyQt5 import QtWidgets
 
 from GUI.menu_principal import MainWindow
-from utils import info_window
+from utils.utils import info_window
 
 
 def check_for_update(current_version, w):

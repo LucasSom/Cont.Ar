@@ -1,20 +1,15 @@
 from typing import Tuple
 
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from matplotlib.path import Path
-import matplotlib.patches as patches
 import matplotlib.lines as mlines
+import matplotlib.patches as patches
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+from _plotly_utils.colors import qualitative
+from matplotlib.path import Path
+from utils.utils import nombre_clasificacion, warning_window
 
-
-nombre_clasificacion = {
-    'Pettijohn_1977': "Pettijohn",
-    'Dickinson_1983_QFL': "Dickinson_QFL",
-    'Dickinson_1983_QmFLQp': "Dickinson_QmFLQp",
-    'Garzanti_2019': 'Garzanti',
-    'Folk': 'Folk'
-}
 y_axis_scale = 2 / (3 ** 0.5)
 
 
@@ -38,7 +33,7 @@ def data_prep(data, top, left, right):
     return x, y
 
 
-def field_boundaries(scheme):
+def field_boundaries(scheme, plotly=False):
     classifications, labels = None, None
     if scheme == 'Pettijohn_1977':
         c1 = ['Quartz arenite', (0.5, 0.9), (0.525, 0.95), (0.5, 1), (0.475, 0.95), (0.5, 0.9)]
@@ -92,7 +87,7 @@ def field_boundaries(scheme):
 
         l1 = ["basamento elevado", 0.165, 0.2, 58]
         l2 = ["continental\ntransicional", 0.365, 0.65, 60]
-        l3 = ["interior cratónico", 0.38, 0.92, 0]
+        l3 = ["interior cratónico", 0.48 if plotly else 0.38, 0.92, 0]
         l4 = ["orógeno reciclado", 0.54, 0.62, 0]
         l5 = ["arco disectado", 0.41, 0.35, 0]
         l6 = ["arco transicional", 0.45, 0.15, 0]
@@ -121,31 +116,6 @@ def field_boundaries(scheme):
         W = (0.555, 0.7708 * y_axis_scale)
         Z = (0.3108, 0.1916 * y_axis_scale)
 
-        # c1 = ['basement uplift', A, D, E1, J, A]
-        # c2 = ['transitional continental', E1, I1, L, J, E1]
-        # c3 = ['craton interior', I1, W, C, L, I1]
-        #
-        # c4 = ['mixed', H1, F1, E1, H1]
-        # c5 = ['dissected arcs', E1, D1, Z, E1]
-        # c6 = ['transitional arc', D, E, A1, C1, Z, D]
-        # c7 = ['undissected arc', E, F, A1, E]
-        #
-        # c8 = ['quartzose recycled', W, F1, G1, U, W]
-        # c9 = ['transitional recycled', B1, Q, U, G1, B1]
-        # c10 = ['lithic recycled', F, B, Q, B1, F]
-        # classifications = [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10]
-        #
-        # l1 = ["basement uplift", 0.165, 0.2, 58]
-        # l2 = ["transitional\n continental", 0.4, 0.65, 60]
-        # l3 = ["craton interior", 0.5, 0.93, 0]
-        # l4 = ["mixed", 0.5, 0.5, 0]
-        # l5 = ["dissected\narc", 0.46, 0.31, 0]
-        # l6 = ["transitional\narc", 0.45, 0.15, 0]
-        # l7 = ["undissected arc", 0.72, 0.025, 0]
-        # l8 = ["quartzose\nrecycled", 0.6, 0.7, 300]
-        # l9 = ["transitional\nrecycled", 0.7, 0.4, 300]
-        # l10 = ["lithic recycled", 0.92, 0.15, 0]
-
         c1 = ['basamento elevado', A, D, E1, J, A]
         c2 = ['continental\ntransicional', E1, I1, L, J, E1]
         c3 = ['interior cratónico', I1, W, C, L, I1]
@@ -161,13 +131,13 @@ def field_boundaries(scheme):
         classifications = [c1, c2, c3, c4, c5, c6, c7, c8, c9, c10]
 
         l1 = ["basamento elevado", 0.165, 0.2, 58]
-        l2 = ["continental\ntransicional", 0.4, 0.65, 60]
-        l3 = ["interior cratónico", 0.5, 0.93, 0]
+        l2 = ["continental\ntransicional", 0.35 if plotly else 0.4, 0.65, 60]
+        l3 = ["interior cratónico", 0.45 if plotly else 0.5, 0.85 if plotly else 0.93, 0]
         l4 = ["mezcla", 0.5, 0.5, 0]
         l5 = ["arco\ndisectado", 0.46, 0.31, 0]
         l6 = ["arco\ntransicional", 0.45, 0.15, 0]
         l7 = ["arco no\ndisectado", 0.72, 0.05, 0]
-        l8 = ["orógeno\nreciclado\ncuarzoso", 0.58, 0.65, 300]
+        l8 = ["orógeno\nreciclado\ncuarzoso", 0.68 if plotly else 0.58, 0.65, 300]
         l9 = ["orógeno\nreciclado\ntransicional", 0.72, 0.4, 300]
         l10 = ["orógeno\nreciclado\nlítico", 0.87, 0.15, 0]
 
@@ -216,10 +186,10 @@ def field_boundaries(scheme):
         l1 = ["feldespática", 0.05, 0.05, 0]
         l2 = ["cuarzosa", 0.5, 0.92, 0]
         l3 = ["lítica", 0.92, 0.05, 0]
-        l4 = ["feldespática-cuarzosa", 0.2, 0.3, 55]
+        l4 = ["feldespática-cuarzosa", 0.2, 0.29 if plotly else 0.3, 55]
         l5 = ["cuarzo-feldespática", 0.38, 0.65, 55]
-        l6 = ["cuarzo-lítica", 0.6, 0.7, 305]
-        l7 = ["lítica-cuarzosa", 0.8, 0.3, 305]
+        l6 = ["cuarzo-lítica", 0.65 if plotly else 0.6, 0.65 if plotly else 0.7, 305]
+        l7 = ["lítica-cuarzosa", 0.8, 0.29 if plotly else 0.3, 305]
         l8 = ["feldespato-lítica", 0.3, 0.05, 0]
         l9 = ["lito-feldespática", 0.7, 0.05, 0]
         l10 = ["IQF", 0.32, 0.35, 0]
@@ -261,8 +231,8 @@ def field_boundaries(scheme):
 
         l1 = ["cuarzoarenita", 0.5, 1, 0]
 
-        l2 = ["subfeldarenita", 0.3, 0.85, 0]
-        l3 = ["sublitoarenita", 0.7, 0.85, 0]
+        l2 = ["subfeldarenita", 0.4 if plotly else 0.3, 0.85, 0]
+        l3 = ["sublitoarenita", 0.6 if plotly else 0.7, 0.85, 0]
 
         l4 = ["feldarenita", 0.2, 0.3, 60]
         l5 = ["feldarenita lítica", 0.4, 0.3, 80]
@@ -279,8 +249,8 @@ def field_boundaries(scheme):
     return classifications, labels
 
 
-def plot_diagrama(data, top, left, right, matrix=None, plot_type='blank', top_label='', left_label='', right_label='',
-                  grid=True, color='g', size=15, include_last_row=True) -> Tuple[pd.DataFrame, plt.Figure]:
+def plot_diagrama_estatico(data, top, left, right, matrix=None, plot_type='blank', top_label='', left_label='', right_label='',
+                           grid=True, size=20, include_last_row=True) -> Tuple[pd.DataFrame, plt.Figure]:
     """
     Grafica un diagrama triangular. Para QFL top=cuarzo, left=feldespato, right=lítico.
 
@@ -305,31 +275,45 @@ def plot_diagrama(data, top, left, right, matrix=None, plot_type='blank', top_la
     """
     list_valid_types = ['Pettijohn_1977', 'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019', 'Folk', 'blank']
     if plot_type not in list_valid_types:
-        raise ValueError("Plot type not recognised, valid types are 'blank', 'Pettijohn_1977', 'Dickinson_1983_QFL', "
-                         "'Dickinson_1983_QmFLQp', 'Garzanti_2019' and 'Folk'")
+        raise ValueError("Tipo de gráfico no reconocido. Los tipos válidos son: 'blank', 'Pettijohn_1977', "
+                         "'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019' and 'Folk'")
+
+    fig, ax = plt.subplots()
 
     x, y = data_prep(data, top, left, right)
-    fig, ax = plt.subplots()
     classifications, labs = field_boundaries(plot_type)
 
     for lab in labs:
         ax.text(lab[1], lab[2], lab[0], ha="center", va="center", rotation=lab[3], size=8)
 
-    ax.scatter(x[:-1], y[:-1], color=color, s=size, edgecolor='k', zorder=10)
+    localidades = data.reset_index()['Localidad'].unique()
+    if len(localidades) > 10:
+        warning_window(None, f"Se han detectado {len(localidades)} localidades distintas.\n"
+                       f"El diagrama soporta hasta 10 formas de punto distintas.")
+    possible_markers = ['o', 's', '^', 'D', 'v', 'P', '*', 'x', 'h', '.']
+    marker_dict = {loc: possible_markers[i % len(possible_markers)] for i, loc in enumerate(localidades)}
+
+    for i, row in data.reset_index().iterrows():
+        if row['Muestra'] != "Promedio":
+            localidad = row['Localidad'] if row['Localidad'] else None
+            unidad = row['Unidad'] if row['Unidad'] else None
+            label = ' - '.join([x for x in (localidad, row['Muestra'], unidad) if pd.notna(x)])
+            ax.scatter(x[i], y[i], cmap='viridis', s=size, edgecolor='k', zorder=10, label=label, marker=marker_dict[row['Localidad']])
     if include_last_row:
-        ax.scatter(x[-1], y[-1], color='r', s=size+1, edgecolor='k', zorder=10)
-    for i, muestra in enumerate(data.index):
-        if i < len(data.index) - 1 or include_last_row:
-            plt.text(x[i] * (1 + 0.01), y[i] * (1 + 0.01), muestra, fontsize=8)
+        ax.scatter(x[-1], y[-1], color='r', marker='X', s=size+5, edgecolor='k', zorder=10)
+
     ax.set_frame_on(False)
     ax.axes.get_xaxis().set_visible(False)
     ax.axes.get_yaxis().set_visible(False)
+
     # label the apexes of the triangle
     ax.text(-0.02, -0.04, str(left_label), ha="center", va="center", rotation=0, size=12)
     ax.text(1.02, -0.04, str(right_label), ha="center", va="center", rotation=0, size=12)
     ax.text(0.5, 1.05, str(top_label), ha="center", va="center", rotation=0, size=12, zorder=0)
     ax.set_xlim(-0.1, 1.1)
     ax.set_ylim(-0.1, 1.1)
+    ax.legend(loc='best', bbox_to_anchor=(1, 0.5))
+    plt.tight_layout()
 
     if grid:
         grid1 = np.linspace(0.1, 0.9, 9)
@@ -386,20 +370,248 @@ def plot_diagrama(data, top, left, right, matrix=None, plot_type='blank', top_la
                     final_data.loc[final_data.index[j], nombre_clasificacion[plot_type]] = classification[0]
                     # add the classification to the column nombre_clasificacion in the datatable
 
-                    if matrix is not None:
-                        if 15 < matrix[j] < 75:  # change the classification if matrix > 15% and less <75%
-                            if classification[0] == 'Sublith Arenite' or classification[0] == 'Lith Arenite':
-                                final_data.loc[j, "Clasificación"] = 'Lithic Wacke'
-                            elif classification[0] == 'Sub Arkose' or classification[0] == 'Arkosic Arenite':
-                                final_data.loc[j, "Clasificación"] = 'Arkosic Wacke'
-                            elif classification[0] == 'Quartz Arenite':
-                                final_data.loc[j, "Clasificación"] = 'Quartz Wacke'
-                        elif matrix[j] > 75:
-                            final_data.loc[j, "Clasificación"] = 'Mudrock'
+                    if matrix is not None and plot_type == 'Pettijohn_1977':
+                        clasificacion_de_otros(classification, final_data, j, matrix)
 
         return final_data, fig
 
-    return data.set_index('Muestra') if data.index.name != 'Muestra' else data, fig
+    return data.set_index('Muestra') if data.index.nlevels == 1 and data.index.name != 'Muestra' else data, fig
+
+
+def clasificacion_de_otros(classification, final_data, j, matrix):
+    if 15 < matrix[j] < 75:  # change the classification if matrix > 15% and less <75%
+        if classification[0] == 'Sublith Arenite' or classification[0] == 'Lith Arenite':
+            final_data.loc[j, "Clasificación"] = 'Lithic Wacke'
+        elif classification[0] == 'Sub Arkose' or classification[0] == 'Arkosic Arenite':
+            final_data.loc[j, "Clasificación"] = 'Arkosic Wacke'
+        elif classification[0] == 'Quartz Arenite':
+            final_data.loc[j, "Clasificación"] = 'Quartz Wacke'
+    elif matrix[j] > 75:
+        final_data.loc[j, "Clasificación"] = 'Mudrock'
+
+
+def graficar_grilla(fig):
+    # Configuración de la grilla
+    grid1 = np.linspace(0.1, 0.9, 9)
+    grid2 = np.linspace(0.05, .45, 9)
+    axislabels = list(range(10, 100, 10))
+    # Añadir líneas y etiquetas
+    for g1, g2, axlab in zip(grid1, grid2, axislabels):
+        # Línea horizontal
+        fig.add_trace(go.Scatter(
+            x=[g2, 1 - g2],
+            y=[g1, g1],
+            mode='lines',
+            line=dict(color='gray', width=0.5, dash='dot'),
+            showlegend=False,
+            hoverinfo='none'
+        ))
+
+        # Línea diagonal izquierda
+        fig.add_trace(go.Scatter(
+            x=[g1, g2],
+            y=[0, g1],
+            mode='lines',
+            line=dict(color='gray', width=0.5, dash='dot'),
+            showlegend=False,
+            hoverinfo='none'
+        ))
+
+        # Línea diagonal derecha
+        fig.add_trace(go.Scatter(
+            x=[1 - g1, 1 - g2],
+            y=[0, g1],
+            mode='lines',
+            line=dict(color='gray', width=0.5, dash='dot'),
+            showlegend=False,
+            hoverinfo='none'
+        ))
+
+        # Añadir etiquetas
+        fig.add_annotation(x=g1, y=-0.02, text=str(axlab), showarrow=False, font=dict(size=10))
+        fig.add_annotation(x=1.02 - g2, y=g1, text=str(axlab), showarrow=False, font=dict(size=10))
+        fig.add_annotation(x=0.48 - g2, y=1 - g1, text=str(axlab), showarrow=False, font=dict(size=10))
+    # Configurar el layout para que se vea como un triángulo
+    fig.update_layout(
+        xaxis=dict(showgrid=False, range=[0, 1], zeroline=False),
+        yaxis=dict(showgrid=False, range=[0, 1], scaleanchor="x", scaleratio=1),
+        plot_bgcolor='white',
+        width=600,
+        height=600,
+        margin=dict(l=20, r=20, t=20, b=20)
+    )
+
+    return fig
+
+
+def plot_diagrama_interactivo(data: pd.DataFrame, top, left, right, plot_type='blank', top_label='',
+                              left_label='', right_label='', size=5, include_last_row=True):
+    """ Genera un diagrama triangular interactivo usando Plotly.
+    Parameters
+    ----------
+    data: pd.DataFrame
+        DataFrame con los datos a graficar. Debe contener las columnas 'Localidad', 'Muestra' y 'Unidad'.
+    top: Union[str, np.ndarray]
+        Valores o nombre de columna para el vértice superior del triángulo.
+    left: Union[str, np.ndarray]
+        Valores o nombre de columna para el vértice izquierdo del triángulo.
+    right: Union[str, np.ndarray]
+        Valores o nombre de columna para el vértice derecho del triángulo.
+    plot_type: str
+        Tipo de diagrama a generar ('blank', 'Pettijohn_1977', 'Dickinson_1983_QFL', 'Dickinson_1983_QmFLQp', 'Garzanti_2019', 'Folk'). Default 'blank'.
+    top_label: str
+        Etiqueta para el vértice superior. Default ''.
+    left_label: str
+        Etiqueta para el vértice izquierdo. Default ''.
+    right_label: str
+        Etiqueta para el vértice derecho. Default ''.
+    size: int
+        Tamaño de los puntos. Default 5.
+    include_last_row: bool
+        Si se incluye la última fila del DataFrame como promedio. Default True.
+
+    Returns
+    -------
+    Tuple[pd.DataFrame, go.Figure]
+        DataFrame original y figura de Plotly con el diagrama triangular interactivo.
+    """
+    x, y = data_prep(data, top, left, right)
+    data_reset = data.reset_index()
+    df = pd.DataFrame({
+        'x': x,
+        'y': y,
+        'Localidad': data_reset['Localidad'] if 'Localidad' in data_reset.columns else None,
+        'Muestra': data_reset['Muestra'] if 'Muestra' in data_reset.columns else None,
+        'Unidad': data_reset['Unidad'] if 'Unidad' in data_reset.columns else None,
+    })
+
+    classifications, labs = field_boundaries(plot_type)
+
+    fig = go.Figure()
+
+    fig = graficar_grilla(fig)
+
+    # Add polygons for each classification field
+    for classification in classifications:
+        polygon = classification[1:]
+        xs, ys = zip(*polygon)
+        fig.add_trace(go.Scatter(
+            x=xs, y=ys, fill='toself', mode='lines',
+            line=dict(color='black', width=1),
+            fillcolor='rgba(0,0,0,0)',
+            name=classification[0],
+            showlegend=False
+        ))
+
+    # Add scatter points
+    localidades = df['Localidad'].unique()
+    colours = qualitative.Plotly * (len(localidades) // len(qualitative.Plotly)) + qualitative.Plotly[:len(localidades) % len(qualitative.Plotly)]
+
+    # Lista para almacenar índices de anotaciones de muestra
+    muestra_annotations_indices = []
+
+    for localidad, color in zip(localidades, colours):
+        subset = df[df['Localidad'] == localidad]
+        fig.add_trace(go.Scatter(
+            x=subset['x'],
+            y=subset['y'],
+            mode='markers',
+            marker=dict(
+                size=size,
+                color=color,
+                line=dict(width=1, color='DarkSlateGrey')
+            ),
+            name=localidad,
+            customdata=subset[['Localidad', 'Muestra', 'Unidad']],
+            hovertemplate=(
+                    "<b>Localidad</b>: %{customdata[0]}<br>" +
+                    "<b>Muestra</b>: %{customdata[1]}<br>" +
+                    "<b>Unidad</b>: %{customdata[2]}<br>" +
+                    "<extra></extra>"
+            ),
+            text=subset['Localidad']
+        ))
+        # Add scatter points with text labels
+        for _, s in subset.iterrows():
+            fig.add_trace(go.Scatter(
+                x=[s['x']],
+                y=[s['y']],
+                mode='markers+text',
+                marker=dict(
+                    size=size,
+                    color=color,
+                    line=dict(width=1, color='DarkSlateGrey')
+                ),
+                text=s['Muestra'],
+                textposition="top center",
+                textfont=dict(size=12, color=color),
+                name=localidad,
+                customdata=[[s['Localidad'], s['Muestra'], s['Unidad']]],
+                hovertemplate=(
+                        "<b>Localidad</b>: %{customdata[0]}<br>" +
+                        "<b>Muestra</b>: %{customdata[1]}<br>" +
+                        "<b>Unidad</b>: %{customdata[2]}<br>" +
+                        "<extra></extra>"
+                ),
+                showlegend=False,
+                visible=True
+            ))
+            muestra_annotations_indices.append(len(fig.data) - 1)
+
+    # Add last row in red if needed
+    if include_last_row:
+        fig.add_trace(go.Scatter(
+            x=[x[-1]], y=[y[-1]],
+            mode='markers',
+            marker=dict(color='red', size=size + 1, line=dict(color='black', width=1)),
+            name='Promedio'
+        ))
+
+    # Add labels for triangle apexes
+    fig.add_annotation(x=-0.02, y=-0.04, text=left_label, showarrow=False, font=dict(size=12))
+    fig.add_annotation(x=1.02, y=-0.04, text=right_label, showarrow=False, font=dict(size=12))
+    fig.add_annotation(x=0.5, y=1.05, text=top_label, showarrow=False, font=dict(size=12))
+
+    # Add field labels
+    for lab in labs:
+        fig.add_annotation(x=lab[1], y=lab[2], text=lab[0], showarrow=False, font=dict(size=8), textangle=0)
+
+    # Crear botones para mostrar/ocultar etiquetas de muestra
+    buttons = [
+        dict(
+            args=[{"visible": True}],
+            label="Mostrar nombre de muestra",
+            method="restyle",
+            args2=[{"visible": True}]
+        ),
+        dict(
+            args=[{"visible": [False if i in muestra_annotations_indices else True for i in range(len(fig.data))]}],
+            label="Ocultar nombre de muestra",
+            method="restyle"
+        )
+    ]
+
+    # Update layout
+    fig.update_layout(
+        xaxis=dict(visible=False, range=[-0.1, 1.1]),
+        yaxis=dict(visible=False, range=[-0.1, 1.1]),
+        plot_bgcolor='white',
+        margin=dict(l=0, r=0, t=30, b=0),  # Aumentar margen superior para los botones
+        legend_title_text='Localidad',
+        updatemenus=[
+            dict(
+                type="dropdown",
+                direction="down",
+                buttons=buttons,
+                x=0.1,
+                xanchor="left",
+                y=1.05,
+                yanchor="top"
+            )
+        ]
+    )
+
+    return data, fig
 
 
 if __name__ == "__main__":
@@ -416,7 +628,8 @@ if __name__ == "__main__":
     matrix = data_pct['PM+Cem']
     # for QFL top = quzrtz, left = feldspar, right = lithic
     # plot type options are 'Dickinson_1983', 'Pettijohn_1977' or 'blank'
-    classified_data, plot = plot_diagrama(data, top=quartz, left=fsp, right=lithic, matrix=matrix, plot_type='Pettijohn_1977',
-                                          top_label='Q', left_label='F', right_label='L', grid=True, color='r', size=15)
-    plt.show()
+    classified_data, plot = plot_diagrama_interactivo(data, top=quartz, left=fsp, right=lithic,
+                                                      plot_type='Pettijohn_1977',
+                                                      top_label='Q', left_label='F', right_label='L', size=15)
+    plot.show()
     print(classified_data)
